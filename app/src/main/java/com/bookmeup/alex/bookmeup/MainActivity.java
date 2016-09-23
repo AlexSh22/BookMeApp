@@ -20,14 +20,16 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onWorkerClick()
     {
-        Intent worker_activity_intent = new Intent(this, BusinessActivity.class);
-        startActivity(worker_activity_intent);
+        Intent worker_login = new Intent(this, LoginActivity.class);
+        worker_login.putExtra("worker", true);
+        startActivity(worker_login);
     }
 
     public void onClientClick()
     {
-        Intent client_activity_intent = new Intent(this, ClientActivity.class);
-        startActivity(client_activity_intent);
+        Intent client_login = new Intent(this, LoginActivity.class);
+        client_login.putExtra("worker", false);
+        startActivity(client_login);
     }
 
 
