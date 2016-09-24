@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -35,6 +34,7 @@ public class LoginAppActivity extends AppCompatActivity
     public ProgressDialog pd;
     private ServerActions myactions;
     private BroadcastReceiver receiver;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,7 +42,7 @@ public class LoginAppActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         is_worker = intent.getBooleanExtra("worker", false);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_app);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         email_sign_in_button = (ImageButton) findViewById(R.id.email_sign_in_button);
@@ -79,9 +79,9 @@ public class LoginAppActivity extends AppCompatActivity
                                 SharedPreferences settings = getSharedPreferences( getResources().getString(R.string.PREFS_FILE), 0);
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putBoolean("login_status", true);
-                                System.out.println("NEW group id is:"+obj.getString(ServerActions.SERVER_DATA));
-                                editor.putString(getResources().getString(R.string.PREFS_GRP), obj.getString(ServerActions.SERVER_DATA));
-                                editor.putString(getResources().getString(R.string.PREFS_GRP_NAME), obj.getString(ServerActions.SERVER_DATA2));
+                                System.out.println("NEW group id is:" + obj.getString(ServerActions.SERVER_DATA));
+                                //editor.putString(getResources().getString(R.string.PREFS_GRP), obj.getString(ServerActions.SERVER_DATA));
+                                //editor.putString(getResources().getString(R.string.PREFS_GRP_NAME), obj.getString(ServerActions.SERVER_DATA2));
                                 editor.commit();
 
 
@@ -90,11 +90,11 @@ public class LoginAppActivity extends AppCompatActivity
                                     Log.d("MainActivity","Call Menu");
                                     // unregister receiver
                                     Intent launcher;
-                                    if(!(obj.getString(ServerActions.SERVER_DATA).equals("0"))){
+                                    if (!(obj.getString(ServerActions.SERVER_DATA).equals("0"))) {
                                         launcher = new Intent(context, MainActivity.class);
-                                    }else{
-                                        if(is_worker)
-                                            launcher = new Intent(context, BusinessActivity.class);
+                                    } else {
+                                        if (is_worker)
+                                            launcher = new Intent(context, BuisnessActivity.class);
                                         else
                                             launcher = new Intent(context, ClientActivity.class);
                                     }
@@ -117,7 +117,7 @@ public class LoginAppActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         Log.e("BroadcastReceiver","JSON error: "+e);
                     }
-                }else{
+                } else {
                     //dismiss progress dialog
                     pd.dismiss();
                     Toast.makeText(context,"Unexpected error occured,Please Try again later",
@@ -132,15 +132,14 @@ public class LoginAppActivity extends AppCompatActivity
 
     }
 
-    public void attemptLogin()
-    {
-        pd = ProgressDialog.show(this, "Loading..", "Please wait",true,true);
+    public void attemptLogin() {
+        pd = ProgressDialog.show(this, "Loading..", "Please wait", true, true);
         // save sharedPrefs, status is false until confirmation
         SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.PREFS_FILE), 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("login_status", false);
-        mEmail = (((EditText)findViewById(R.id.email)).getText().toString());
-        mPassword = (((EditText)findViewById(R.id.password)).getText().toString());
+        mEmail = (((EditText) findViewById(R.id.email)).getText().toString());
+        mPassword = (((EditText) findViewById(R.id.password)).getText().toString());
 
         editor.putString("prefs_user", mEmail);
         editor.putString("prefs_pwd", mPassword);
@@ -153,23 +152,42 @@ public class LoginAppActivity extends AppCompatActivity
         attemptLogin();
     }
 
+    public void onExit(View view)
+    {
+        finish();
+    }
+
     public void onStart(){
         super.onStart();
 
         SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.PREFS_FILE), 0);
-        boolean login_stats = settings.getBoolean(getResources().getString(R.string.PREFS_STATS), false);
+        boolean login_stats = settings.getBoolean("login_status", false);
         if (login_stats) {
             try {
                 pd = ProgressDialog.show(this, "Loading...", "Please wait",true,true);
 
-                userName = settings.getString(getResources().getString(R.string.PREFS_USER),"username");
-                passWord = settings.getString(getResources().getString(R.string.PREFS_PWD),"password");
-                myactions.new_user_registery(userName, passWord);
+                mEmail = settings.getString(getResources().getString(R.string.PREFS_USER),"username");
+                mPassword = settings.getString(getResources().getString(R.string.PREFS_PWD),"password");
+                myactions.new_user_registery(mEmail, mPassword);
             } catch (RuntimeException e) {
                 Log.e("LoginActivity","Failed Call Menu: "+e);
             }
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregister filter
+        unregisterReceiver(receiver);
+        // call finish on self
+
+    }
 
 }
