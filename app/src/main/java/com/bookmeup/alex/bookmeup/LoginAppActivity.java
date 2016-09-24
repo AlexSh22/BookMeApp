@@ -140,11 +140,10 @@ public class LoginAppActivity extends AppCompatActivity
         editor.putBoolean("login_status", false);
         mEmail = (((EditText) findViewById(R.id.email)).getText().toString());
         mPassword = (((EditText) findViewById(R.id.password)).getText().toString());
-
-        editor.putString("prefs_user", mEmail);
-        editor.putString("prefs_pwd", mPassword);
+        editor.putString(getResources().getString(R.string.PREFS_USER), mEmail);
+        editor.putString(getResources().getString(R.string.PREFS_PWD), mPassword);
         editor.commit();
-        myactions.new_user_registery(mEmail, mPassword);
+        myactions.new_user_registery(mEmail, mPassword, is_worker);
     }
 
     public void registrationClick(View v)
@@ -162,13 +161,14 @@ public class LoginAppActivity extends AppCompatActivity
 
         SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.PREFS_FILE), 0);
         boolean login_stats = settings.getBoolean("login_status", false);
-        if (login_stats) {
+        String tmp = settings.getString(getResources().getString(R.string.PREFS_USER),"username");
+        if (login_stats && !tmp.equalsIgnoreCase("username")) {
             try {
                 pd = ProgressDialog.show(this, "Loading...", "Please wait",true,true);
 
                 mEmail = settings.getString(getResources().getString(R.string.PREFS_USER),"username");
                 mPassword = settings.getString(getResources().getString(R.string.PREFS_PWD),"password");
-                myactions.new_user_registery(mEmail, mPassword);
+                myactions.new_user_registery(mEmail, mPassword, is_worker);
             } catch (RuntimeException e) {
                 Log.e("LoginActivity","Failed Call Menu: "+e);
             }

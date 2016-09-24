@@ -14,24 +14,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right">
+        android:gravity="right"
+        android:id="@+id/relativeLayout">
 
-    <TextView
-        android:id="@+id/name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="שם העסק"
+        android:id="@+id/buisness_layout">
+
+        <EditText
+        android:id="@+id/business_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="שם העסק"
         android:textSize="25dp"
         android:gravity="start"
         android:layout_marginBottom="20dp"/>
 
+    </LinearLayout>
 
     <TextView
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="כתובת העסק"
-        android:layout_below="@id/name"
+        android:layout_below="@id/buisness_layout"
         android:textSize="25dp"
         android:layout_marginBottom="20dp"/>
 
@@ -52,5 +59,37 @@
         android:textSize="25dp"
         android:layout_marginBottom="20dp"/>
 
+        <TextView
+            android:id="@+id/hours"
+            android:layout_width="match_parent"
+            android:layout_below="@id/details"
+            android:layout_height="wrap_content"
+            android:text="שעת קבלה"
+            android:textSize="25dp"
+            android:layout_marginBottom="20dp"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/accept_time"
+            android:layout_below="@+id/details"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "הוסף עסק"
+        android:textColor="#ffffff"
+        android:background="@color/button_blue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:id="@+id/button_add_business"
+        android:clickable="true"
+        android:onClick="add_business_click"/>
+
 </RelativeLayout>

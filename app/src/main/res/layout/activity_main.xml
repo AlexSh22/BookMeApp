@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"></LinearLayout>
     <TextView
+        android:id="@+id/mainTitle"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:text="יצירת חשבון"
@@ -51,5 +52,19 @@
         android:layout_marginBottom="20dp"
         android:clickable="true"
         android:onClick="onClientClick"/>
+
+    <TextView
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        android:text="התנתק"
+        android:textColor="@color/button_blue"
+        android:clickable="true"
+        android:onClick="onLogoutClick"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
+
 
 </RelativeLayout>

@@ -37,7 +37,9 @@
                 android:inputType="textEmailAddress"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:clickable="true"
+                android:onClick="search_business_click"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -51,7 +53,8 @@
             android:clickable="true"
             android:text="חפש"
             android:textSize="25dp"
-            android:background="@color/blue_background"
+            android:textColor="#ffffff"
+            android:background="@color/button_blue"
             android:onClick="registrationClick"/>
 
     </LinearLayout>

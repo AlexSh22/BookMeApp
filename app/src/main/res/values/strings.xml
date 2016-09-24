@@ -16,6 +16,8 @@
     </string>
     <string name="PREFS_FILE">shared_preferences</string>
     <string name="SERVER_LOGIN">BookMeUp.connection.ACTION_NEW_USER_REGISTER</string>
+    <string name="SERVER_ADD_BUSINESS">BookMeUp.connection.ACTION_ADD_BUSINESS</string>
+    <string name="SERVER_SEARCH_BUSINESS">BookMeUp.connection.ACTION_SEARCH_BUSINESS</string>
     <string name="PREFS_USER">username</string>
     <string name="PREFS_PWD">password</string>
 
