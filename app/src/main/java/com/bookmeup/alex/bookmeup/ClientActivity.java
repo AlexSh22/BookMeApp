@@ -31,12 +31,17 @@ public class ClientActivity extends AppCompatActivity {
     private String business_name;
     private String accept_time;
     private EditText businessName;
+    private TextView mTimeTitle;
+    private TextView mHourAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
         businessName = (EditText) (findViewById(R.id.buisness_search));
+        mTimeTitle = (TextView) findViewById(R.id.hourTitle);
+        mHourAvailable = (TextView) findViewById(R.id.hourAvailable);
+
         myactions = new ServerActions(this, getResources().getString(R.string.SERVER_SEARCH_BUSINESS));
 
         receiver = new BroadcastReceiver() {
@@ -60,11 +65,52 @@ public class ClientActivity extends AppCompatActivity {
                                 System.out.println("========after json to str ====");
 
                                 if (obj.getString(ServerActions.SERVER_RET_VAL).equals("1")) {
-                                    /** Business added */
+                                    /** business found*/
                                     System.out.println("Search business return 1 (succeeded)");
+                                    accept_time = obj.getString(ServerActions.SERVER_DATA);
+                                    mHourAvailable.setText(accept_time);
+                                    mTimeTitle.setVisibility(View.VISIBLE);
+                                    mHourAvailable.setVisibility(View.VISIBLE);
+
+                                    /*Toast.makeText(context, obj.getString(ServerActions.SERVER_MSG),
+                                            Toast.LENGTH_LONG).show();
+                                    Log.i("CLientActivity", "free time: " + accept_time);*/
+                                }
+                                else if (obj.getString(ServerActions.SERVER_RET_VAL).equals("22")) {
+                                    /** Business added */
+                                    System.out.println("Search business return 22 (succeeded)");
                                     Toast.makeText(context, obj.getString(ServerActions.SERVER_MSG),
                                             Toast.LENGTH_LONG).show();
 
+                                } else {
+                                    /** Business added */
+                                    System.out.println("Search business return 0");
+                                    Toast.makeText(context, obj.getString(ServerActions.SERVER_MSG),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            if (obj.getString(ServerActions.ACTION_COMMAND).equals(ServerActions.ACTION_REQUEST_APPOINTMENT)) {
+                                //dismiss progress dialog
+                                System.out.println(obj.toString());
+                                //dismiss progress dialog
+                                pd.dismiss();
+                                System.out.println("========before json to str ====");
+                                System.out.println(obj.toString());  //TODO debug-remove
+                                System.out.println("========after json to str ====");
+
+                                if (obj.getString(ServerActions.SERVER_RET_VAL).equals("1")) {
+                                    /** business found*/
+                                    System.out.println("request appointment return 1 (succeeded)");
+
+                                    Toast.makeText(context, obj.getString(ServerActions.SERVER_MSG),
+                                            Toast.LENGTH_LONG).show();
+                                    Log.i("CLientActivity", "Appointment request sent to business" );
+                                } else {
+                                    /** Business added */
+                                    System.out.println("request appointment return 0");
+                                    Toast.makeText(context, obj.getString(ServerActions.SERVER_MSG),
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -91,6 +137,23 @@ public class ClientActivity extends AppCompatActivity {
             try {
                 pd = ProgressDialog.show(this, "Searching...", "Please wait", true, true);
                 myactions.search_business(business_name);
+            } catch (RuntimeException e) {
+                Log.e("ClientActivity", "Failed Call Menu: " + e);
+            }
+        } else {
+            Log.i("ClientActivity","business name: " + business_name);
+        }
+    }
+
+    public void request_appointment_click(View v)
+    {
+        business_name = businessName.getText().toString();
+
+        Log.i("ClientActivity","request appointment was clicked");
+        if (!business_name.isEmpty()) {
+            try {
+                pd = ProgressDialog.show(this, "Requesting...", "Please wait", true, true);
+                myactions.request_appointment(business_name, mHourAvailable.getText().toString());
             } catch (RuntimeException e) {
                 Log.e("ClientActivity", "Failed Call Menu: " + e);
             }

@@ -20,6 +20,7 @@ public class ServerActions {
     public static final String ACTION_NEW_USER_REGISTER = "new_user_registry";
     public static final String ACTION_ADD_BUSINESS = "add_business";
     public static final String ACTION_SEARCH_BUSINESS = "search_business";
+    public static final String ACTION_REQUEST_APPOINTMENT = "request_appointment";
     public static final String SERVER_RET_VAL = "return value";
     public static final String SERVER_MSG = "msg";
     public static final String SERVER_DATA = "data";
@@ -114,6 +115,36 @@ public class ServerActions {
         {
             info.put(ACTION_COMMAND, ACTION_SEARCH_BUSINESS);
             info.put("business_name", business_name);
+
+            System.out.println("try to send to server!!");
+        }
+        catch (JSONException e)
+        {
+            Log.e("JSONObject","IOException:" +  e.toString());
+        }
+        finally
+        {
+            /** call intentService */
+            Intent msgIntent = new Intent(this.activity, HTTPIntentService.class);
+            msgIntent.putExtra(HTTPIntentService.PARAM_URL, URL);
+            msgIntent.putExtra(HTTPIntentService.PARAM_IN_MSG, info.toString());
+            msgIntent.putExtra(HTTPIntentService.PARAM_BR_ACTION_NAME, br_action_name);
+            System.out.println("finally send to server");
+
+            this.activity.startService(msgIntent);
+            System.out.println("start http activity");
+        }
+    }
+
+    public void request_appointment(final String business_name, final String appointment)
+    {
+        JSONObject info = new JSONObject();
+        /** Add data to JSON object */
+        try
+        {
+            info.put(ACTION_COMMAND, ACTION_REQUEST_APPOINTMENT);
+            info.put("business_name", business_name);
+            info.put("accept_time", appointment);
 
             System.out.println("try to send to server!!");
         }

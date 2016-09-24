@@ -37,9 +37,7 @@
                 android:inputType="textEmailAddress"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
-                android:singleLine="true"
-                android:clickable="true"
-                android:onClick="search_business_click"/>
+                android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -55,8 +53,37 @@
             android:textSize="25dp"
             android:textColor="#ffffff"
             android:background="@color/button_blue"
-            android:onClick="registrationClick"/>
+            android:onClick="search_business_click"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/hourTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="שעה פנויה"
+                android:textSize="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="invisible"/>
+            <TextView
+                android:id="@+id/hourAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="לא נמצאה"
+                android:textSize="25dp"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/hourTitle"
+                android:visibility="invisible"
+                android:clickable="true"
+                android:onClick="request_appointment_click"/>
+        </RelativeLayout>
     </LinearLayout>
+
+
 
 </RelativeLayout>
